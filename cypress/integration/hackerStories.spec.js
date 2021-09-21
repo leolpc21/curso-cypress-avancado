@@ -153,7 +153,10 @@ describe('Hacker Stories', () => {
         it('shows a max of 5 buttons for the last searched terms', () => {
           const faker = require('faker')
 
-          cy.intercept('GET', '**/search**').as('getNewTermFakerStories')
+          cy.intercept('GET', 
+          '**/search**', 
+          { fixture: 'empty'})
+          .as('getNewTermFakerStories')
 
           Cypress._.times(6, () => {
             cy.get('#search')
