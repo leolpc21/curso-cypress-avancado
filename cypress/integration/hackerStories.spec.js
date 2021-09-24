@@ -279,13 +279,13 @@ describe('Hacker Stories', () => {
             cy.wait('@getNewTermFakerStories')
             cy.getLocalStorage('search')
               .should('be.equal', randowWord)
-          })          
+          })
 
           cy.get('.last-searches')
-            .within(()=>{
+            .within(() => {
               cy.get('button')
                 .should('have.length', 5)
-            })            
+            })
         })
       })
     })
@@ -321,5 +321,24 @@ context('Errors', () => {
 
     cy.get('p:contains(Something went wrong ...)')
       .should('be.visible')
+  })
+})
+
+context('Delay Stories', () => {
+  it('shows a "Loading ..." state before showing the results', () => {
+    cy.intercept(
+      'GET',
+      '**/search**',
+      {
+        delay: 1000,
+        fixture: 'stories'
+      }
+    ).as('getDelayedStories')
+
+    cy.visit('/')
+
+    cy.assertLoadingIsShownAndHidden()
+    cy.wait('@getDelayedStories')
+    cy.get('.item').should('have.length', 2)
   })
 })
